@@ -1,0 +1,20 @@
+{
+  "name": "zeezoo",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+      "bootstrap": "http://twitter.github.com/bootstrap/assets/bootstrap.zip",
+      "angular": "1.0.7",
+      "angular-resource": "1.0.7",
+      "angular-bootstrap": "0.3.0",
+      "angular-ui": "0.4.0",
+      "jquery": "1.9.1",
+      "blueimp-file-upload": "8.2.1",
+      "blueimp-load-image": "15a2b276c0f27daa23af12f31e354b570ef12b60",
+      "blueimp-canvas-to-blob": "65e22836ed90d31515d08a2d0ec4f96d37b6b193"
+  }
+}
