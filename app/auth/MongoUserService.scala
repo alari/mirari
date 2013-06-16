@@ -1,4 +1,4 @@
-package service
+package auth
 
 import securesocial.core._
 import securesocial.core.providers.Token
@@ -14,8 +14,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-import model.UserIdentity
-import model.UserIdentity._
 import org.joda.time.DateTime
 import reactivemongo.api.indexes.{IndexType, Index}
 

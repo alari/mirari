@@ -1,12 +1,12 @@
-define ["zeezoo", "auth/AuthService"], ->
-  angular.module("zeezoo").controller 'AuthController', ($scope, authService) ->
-    $scope.authService = authService
+define ["main", "auth/AuthService"], (m)->
+  m.controller 'AuthController', ['$scope', 'authService', ($scope, authService) ->
     $scope.credentials = {}
-    # workaround for $watch (We can only watch something in $scope)
 
     updateAuthStatus = ->
       $scope.isAuthenticated = authService.isAuthenticated
       $scope.username = authService.username
+
+    $scope.$on authService.STATUS_UPDATED, updateAuthStatus
 
     $scope.error = authService.error
 
@@ -19,7 +19,7 @@ define ["zeezoo", "auth/AuthService"], ->
 
     $scope.signOut = ->
       authService.signOut()
+      $scope.$apply() if not $scope.$$phase
 
     authService.checkAuth()
-
-    $scope.$watch 'authService.isAuthenticated', updateAuthStatus
+  ]

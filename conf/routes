@@ -3,16 +3,18 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                           controllers.Application.index(jsRoute = "")
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
+GET     /api/talk/socket               talk.TalkApi.socket
+
 # Json auth
-GET     /api/auth/status                controllers.AuthApi.status
-POST    /api/auth/in                    controllers.AuthApi.signIn
-POST    /api/auth/out                   controllers.AuthApi.signOut
+GET     /api/auth/status                auth.AuthApi.status
+POST    /api/auth/in                    auth.AuthApi.signIn
+POST    /api/auth/out                   auth.AuthApi.signOut
 
 
 # Login page
@@ -35,3 +37,5 @@ POST    /password                   securesocial.controllers.PasswordChange.hand
 GET     /authenticate/:provider     securesocial.controllers.ProviderController.authenticate(provider)
 POST    /authenticate/:provider     securesocial.controllers.ProviderController.authenticateByPost(provider)
 GET     /not-authorized             securesocial.controllers.ProviderController.notAuthorized
+
+GET     /:jsRoute                           controllers.Application.index(jsRoute)

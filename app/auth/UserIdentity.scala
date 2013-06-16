@@ -1,4 +1,4 @@
-package model
+package auth
 
 import securesocial.core._
 import play.api.libs.json._

@@ -5,7 +5,7 @@ import play.api.mvc._
 
 object Application extends Controller with securesocial.core.SecureSocial {
 
-  def index = UserAwareAction { implicit request =>
+  def index(jsRoute:String) = UserAwareAction { implicit request =>
     val userName = request.user match {
       case Some(user) => user.fullName
       case _ => "guest"

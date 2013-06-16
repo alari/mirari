@@ -1,0 +1,11 @@
+<div>
+    <form class="navbar-form" ui-if="!isAuthenticated" ng-submit="signIn()">
+        <input type="text" class="span2" placeholder="email" ng-model="credentials.username" autofocus/>
+        <input type="password" class="span2" placeholder="password" ng-model="credentials.password"/>
+        <button type="submit" class="btn">Sign In</button>
+    </form>
+
+                            <span ui-if="isAuthenticated" class="navbar-form">
+                                {{username}} <button ng-click="signOut()">Sign Out</button>
+                            </span>
+</div>

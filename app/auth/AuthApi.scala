@@ -1,4 +1,4 @@
-package controllers
+package auth
 
 import play.api.mvc._
 import play.api.libs.json.{JsObject, Json}
