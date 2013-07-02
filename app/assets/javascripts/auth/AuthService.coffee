@@ -4,9 +4,9 @@ define ["main"], (m)->
     @username = null
     @error = null
 
-    @STATUS_UPDATED = "auth status updated"
-
-    changeCallbacks = []
+    @STATUS_UPDATED = "auth:status:updated"
+    @STATUS_OUT = "auth:status:out"
+    @STATUS_IN = "auth:status:in"
 
     updateStatus = (data, callback) =>
       @isAuthenticated = data.isAuthenticated
@@ -24,13 +24,19 @@ define ["main"], (m)->
     @signIn = (credentials, onSuccessCallback) ->
       $http.post('/api/auth/in', credentials).success (data) =>
         updateStatus data, onSuccessCallback
+        if @isAuthenticated
+          $rootScope.$broadcast @STATUS_IN, data
+      .error (data) =>
+        updateStatus data, onSuccessCallback
 
     @signOut = (onSuccessCallback)->
       $http.post('/api/auth/out').success (data) =>
         updateStatus data, onSuccessCallback
+        if not @isAuthenticated
+          $rootScope.$broadcast @STATUS_OUT, data
 
-    @onUpdate = (callback)->
-      changeCallbacks.push(callback)
+    @onUpdate = (callback)=>
+      $rootScope.$on @STATUS_UPDATED, callback
 
     @
   ]

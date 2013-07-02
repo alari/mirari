@@ -10,7 +10,7 @@
       "bootstrap": "http://twitter.github.com/bootstrap/assets/bootstrap.zip",
       "angular": "1.0.7",
       "angular-resource": "1.0.7",
-      "angular-bootstrap": "0.3.0",
+      "angular-bootstrap": "0.4.0",
       "angular-ui": "0.4.0",
       "jquery": "1.9.1",
       "blueimp-file-upload": "8.2.1",

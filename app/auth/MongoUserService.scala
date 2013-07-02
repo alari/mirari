@@ -21,7 +21,7 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   implicit def app = application
 
   var db: DefaultDB = _
-  val timeout = Duration.create(1, "second")
+  val Timeout = Duration.create(1, "second")
 
   def usersCollection: JSONCollection = db.collection[JSONCollection]("users")
   def tokensCollection: JSONCollection = db.collection[JSONCollection]("user.tokens")
@@ -37,7 +37,7 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   }
 
   def find(id: UserId): Option[UserIdentity] = {
-    val result = Await.result(usersCollection.find(Json.obj("userId" -> id.id, "providerId" -> id.providerId)).one[UserIdentity], timeout)
+    val result = Await.result(usersCollection.find(Json.obj("userId" -> id.id, "providerId" -> id.providerId)).one[UserIdentity], Timeout)
     if (result.isEmpty) {
       return Option.empty
     }
@@ -47,7 +47,7 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   }
 
   def findByEmailAndProvider(email: String, providerId: String): Option[UserIdentity] = {
-    val result = Await.result(usersCollection.find(Json.obj("email" -> email, "providerId" -> providerId)).one[UserIdentity], timeout)
+    val result = Await.result(usersCollection.find(Json.obj("email" -> email, "providerId" -> providerId)).one[UserIdentity], Timeout)
 
     if (result.isEmpty) {
       return Option.empty
@@ -60,7 +60,7 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   def save(user: Identity): UserIdentity = {
     val jsonUser: UserIdentity = user
 
-    Await.ready(usersCollection.insert(jsonUser).map(lastError => Logger.error(lastError.stringify)), timeout)
+    Await.ready(usersCollection.insert(jsonUser).map(lastError => Logger.error(lastError.stringify)), Timeout)
 
     find(user.id).get
   }
@@ -74,7 +74,7 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   }
 
   def findToken(token: String): Option[Token] = {
-    val result = Await.result(tokensCollection.find(Json.obj("uuid"->token)).one[Token], timeout)
+    val result = Await.result(tokensCollection.find(Json.obj("uuid"->token)).one[Token], Timeout)
     if(result.isEmpty) {
       return Option.empty[Token]
     }

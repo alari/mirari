@@ -12,19 +12,20 @@ require.config
     "angular-ui-ieshiv":
       deps: ["angular-ui"]
 
-define ["angular-ui", "resolver"], ->
+define ["angular-ui", "resolver", "auth/interceptor"], ->
 
-  app = angular.module "mirari", ["ui", "resolver"],
+  app = angular.module "mirari", ["ui", "resolver", "auth.interceptor"],
   ['$routeProvider', '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
-   'routeResolverProvider',
-    ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, routeResolverProvider)->
+   'routeResolverProvider', 'authInterceptorProvider',
+    ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, routeResolverProvider, authInterceptorProvider)->
       routeResolverProvider.app = "mirari"
 
-      routeResolverProvider.providers = {
-        $controllerProvider: $controllerProvider,
-        $compileProvider: $compileProvider,
+      routeResolverProvider.providers =
+        $controllerProvider: $controllerProvider
+        $compileProvider: $compileProvider
         $provide: $provide
-      };
+        $filterProvider: $filterProvider
+
 
       routeResolver = routeResolverProvider.$get()
 
@@ -36,8 +37,11 @@ define ["angular-ui", "resolver"], ->
           routeResolver.resolve(["talk/ChatController"], "chat", "Chat"))
 
       $locationProvider.html5Mode(true)
+
+      authInterceptorProvider.unauthorized "/auth"
   ]
 
-  angular.bootstrap(document, ['mirari']);
+  angular.element(document).ready ->
+    angular.bootstrap(document, ['mirari'])
 
   app

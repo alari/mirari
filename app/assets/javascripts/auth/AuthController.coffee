@@ -2,24 +2,24 @@ define ["main", "auth/AuthService"], (m)->
   m.controller 'AuthController', ['$scope', 'authService', ($scope, authService) ->
     $scope.credentials = {}
 
-    updateAuthStatus = ->
+    $scope.updateAuthStatus = ->
       $scope.isAuthenticated = authService.isAuthenticated
       $scope.username = authService.username
+      $scope.error = authService.error
+      $scope.$apply() if not $scope.$$phase
 
-    $scope.$on authService.STATUS_UPDATED, updateAuthStatus
+    authService.onUpdate $scope.updateAuthStatus
 
     $scope.error = authService.error
 
+    $scope.closeError = ->
+      $scope.error = null
+
     $scope.signIn = ->
       authService.signIn $scope.credentials, ->
-        if authService.error
-          alert authService.error
-        else
+        if not authService.error
           $scope.credentials = {}
 
     $scope.signOut = ->
       authService.signOut()
-      $scope.$apply() if not $scope.$$phase
-
-    authService.checkAuth()
   ]
