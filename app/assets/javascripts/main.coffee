@@ -41,7 +41,8 @@ define ["angular-ui", "resolver", "auth/interceptor"], ->
       authInterceptorProvider.unauthorized "/auth"
   ]
 
-  angular.element(document).ready ->
-    angular.bootstrap(document, ['mirari'])
+  require ["AppController"], ->
+    angular.element(document).ready ->
+      angular.bootstrap(document, ['mirari'])
 
   app
