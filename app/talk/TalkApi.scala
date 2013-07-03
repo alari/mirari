@@ -14,8 +14,10 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
   def newTalk = UserAwareAction(parse.json) {implicit request=>
     request.user match {
       case Some(user) =>
-        TalkChain.format.reads(request.body) match {
-          case JsSuccess(t, _) => Ok(Json.toJson(t))
+        NewTalk.format.reads(request.body) match {
+          case JsSuccess(t, _) =>
+            val tc = TalkChain.create(user, t)
+            Ok(Json.toJson(tc))
           case err @ JsError(_) => BadRequest(JsError.toFlatJson(err))
         }
       case _ => Unauthorized
@@ -40,5 +42,4 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
   }
 
 }
-
 

@@ -1,21 +1,27 @@
 <form class="form-horizontal">
     <div class="control-group">
-        <label class="control-label">Address Email</label>
+        <label class="control-label">Кому:</label>
         <div class="controls">
-            <input type="email" placeholder="Email">
+            <input type="email" placeholder="Email" ng-model="msg.to">
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">Message</label>
+        <label class="control-label">Тема:</label>
         <div class="controls">
-            <textarea>
+            <input type="text" placeholder="Тема" ng-model="msg.topic">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Сообщение</label>
+        <div class="controls">
+            <textarea ng-model="msg.text">
 
             </textarea>
         </div>
     </div>
     <div class="control-group">
         <div class="controls">
-            <button type="submit" class="btn">Send</button>
+            <button type="submit" class="btn" ng-click="sendMsg()">Send</button>
         </div>
     </div>
 </form>

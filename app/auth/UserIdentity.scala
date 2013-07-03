@@ -36,8 +36,15 @@ object UserIdentity {
 
   implicit val userIdentityFormat = Json.format[UserIdentity]
 
-  implicit def identity2user(user: Identity): UserIdentity = UserIdentity(
+  implicit def identity2userIdentity(user: Identity): UserIdentity = UserIdentity(
     user.id.id, user.id.providerId, user.firstName, user.lastName, user.fullName,
+    user.email, user.avatarUrl,
+    user.authMethod,
+    user.oAuth1Info, user.oAuth2Info, user.passwordInfo
+  )
+
+  implicit def user2userIdentity(user:User): UserIdentity = UserIdentity(
+    user.userId, user.providerId, user.firstName, user.lastName, user.fullName,
     user.email, user.avatarUrl,
     user.authMethod,
     user.oAuth1Info, user.oAuth2Info, user.passwordInfo

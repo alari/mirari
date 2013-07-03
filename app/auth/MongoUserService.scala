@@ -20,34 +20,20 @@ import reactivemongo.api.indexes.{IndexType, Index}
 class MongoUserService(application: Application) extends UserServicePlugin(application) {
   implicit def app = application
 
-  var db: DefaultDB = _
   val Timeout = Duration.create(1, "second")
 
-  def usersCollection: JSONCollection = db.collection[JSONCollection]("users")
-  def tokensCollection: JSONCollection = db.collection[JSONCollection]("user.tokens")
-
-  override def onStart() {
-    db = ReactiveMongoPlugin.db
-
-    usersCollection.indexesManager.ensure(Index(Seq("userId"->IndexType.Descending, "providerId"->IndexType.Descending), unique = true, dropDups = true))
-    tokensCollection.indexesManager.ensure(Index(Seq("uuid"->IndexType.Descending), unique = true, dropDups = true))
-    tokensCollection.indexesManager.ensure(Index(Seq("expirationDate"->IndexType.Descending)))
-
-    super.onStart()
-  }
-
   def find(id: UserId): Option[UserIdentity] = {
-    val result = Await.result(usersCollection.find(Json.obj("userId" -> id.id, "providerId" -> id.providerId)).one[UserIdentity], Timeout)
+    val result = Await.result(User.findByUserId(id), Timeout)
     if (result.isEmpty) {
       return Option.empty
     }
     val user = result.get
 
-    Option.apply(user)
+    Option(user)
   }
 
   def findByEmailAndProvider(email: String, providerId: String): Option[UserIdentity] = {
-    val result = Await.result(usersCollection.find(Json.obj("email" -> email, "providerId" -> providerId)).one[UserIdentity], Timeout)
+    val result = Await.result(User.findByEmailAndProvider(email, providerId), Timeout)
 
     if (result.isEmpty) {
       return Option.empty
@@ -60,12 +46,25 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   def save(user: Identity): UserIdentity = {
     val jsonUser: UserIdentity = user
 
-    Await.ready(usersCollection.insert(jsonUser).map(lastError => Logger.error(lastError.stringify)), Timeout)
+    Await.ready(User.insert(jsonUser).map(lastError => Logger.error(lastError.stringify)), Timeout)
 
     find(user.id).get
   }
 
 
+
+  var db: DefaultDB = _
+
+  def tokensCollection: JSONCollection = db.collection[JSONCollection]("user.tokens")
+
+  override def onStart() {
+    db = ReactiveMongoPlugin.db
+
+    tokensCollection.indexesManager.ensure(Index(Seq("uuid"->IndexType.Descending), unique = true, dropDups = true))
+    tokensCollection.indexesManager.ensure(Index(Seq("expirationDate"->IndexType.Descending)))
+
+    super.onStart()
+  }
 
   implicit val tokenFormat = Json.format[Token]
 
@@ -74,11 +73,7 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
   }
 
   def findToken(token: String): Option[Token] = {
-    val result = Await.result(tokensCollection.find(Json.obj("uuid"->token)).one[Token], Timeout)
-    if(result.isEmpty) {
-      return Option.empty[Token]
-    }
-    Option.apply(result.get)
+    Await.result(tokensCollection.find(Json.obj("uuid"->token)).one[Token], Timeout)
   }
 
   def deleteToken(uuid: String) {

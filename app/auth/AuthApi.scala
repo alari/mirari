@@ -28,7 +28,7 @@ object AuthApi extends Controller with securesocial.core.SecureSocial {
               case _ => result
             }
           } , {
-            user => println("about to complete auth"); completeAuthentication(user, session)
+            user => completeAuthentication(user, session)
           })
         } catch {
           case ex: AccessDeniedException => {

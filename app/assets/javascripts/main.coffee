@@ -31,10 +31,10 @@ define ["angular-ui", "resolver", "auth/interceptor"], ->
 
       $routeProvider
         .when("/auth",
-          routeResolver.resolve(["auth/AuthController"], "auth", "Auth"))
+          routeResolver.resolve(["auth/AuthController"], "auth/auth", "Auth"))
 
-        .when("/chat",
-          routeResolver.resolve(["talk/ChatController"], "chat", "Chat"))
+        .when("/talk/new",
+          routeResolver.resolve(["talk/NewTalkController"], "talk/new", "NewTalk"))
 
       $locationProvider.html5Mode(true)
 

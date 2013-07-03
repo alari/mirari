@@ -13,12 +13,14 @@
     </head>
     <body ng-controller="AppController">
 
-        <h1>index page</h1>
+        <h1>Мирари</h1>
 
-        <a href="/auth">auth</a>
+        <a href="/auth">Вход</a>
 
         <span ui-if="isAuthenticated">
-            <a href="/talks">Talks List</a>
+            <a href="/talk">Беседы</a>
+
+            <a href="/talk/new">Новая беседа</a>
         </span>
 
         <ng-view></ng-view>
