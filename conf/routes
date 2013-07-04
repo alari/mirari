@@ -11,6 +11,7 @@ GET      /assets/*file                       controllers.Assets.at(path="/public
 
 GET      /api/talk/socket                    talk.TalkApi.socket
 POST     /api/talk/new                       talk.TalkApi.newTalk
+GET      /api/talk/:id                       talk.TalkApi.messages(id)
 
 # Json auth
 GET      /api/auth/status                    auth.AuthApi.status

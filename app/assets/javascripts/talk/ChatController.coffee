@@ -1,6 +1,11 @@
 define ["main"], (m)->
-  m.controller "ChatController", ($scope)->
+  m.controller "ChatController", ($scope, $http, $route)->
+    id = $route.current.params.id
+
     $scope.messages = []
+
+    $http.get("/api/talk/#{id}").success (data)=>
+      $scope.messages = data
 
     ws = new WebSocket("ws://localhost:9000/api/talk/socket")
 

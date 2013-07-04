@@ -22,32 +22,16 @@ class MongoUserService(application: Application) extends UserServicePlugin(appli
 
   val Timeout = Duration.create(1, "second")
 
-  def find(id: UserId): Option[UserIdentity] = {
-    val result = Await.result(User.findByUserId(id), Timeout)
-    if (result.isEmpty) {
-      return Option.empty
-    }
-    val user = result.get
-
-    Option(user)
+  def find(id: UserId): Option[User] = {
+    Await.result(User.findByUserId(id), Timeout)
   }
 
-  def findByEmailAndProvider(email: String, providerId: String): Option[UserIdentity] = {
-    val result = Await.result(User.findByEmailAndProvider(email, providerId), Timeout)
-
-    if (result.isEmpty) {
-      return Option.empty
-    }
-    val user = result.get
-
-    Option.apply(user)
+  def findByEmailAndProvider(email: String, providerId: String): Option[User] = {
+    Await.result(User.findByEmailAndProvider(email, providerId), Timeout)
   }
 
-  def save(user: Identity): UserIdentity = {
-    val jsonUser: UserIdentity = user
-
-    Await.ready(User.insert(jsonUser).map(lastError => Logger.error(lastError.stringify)), Timeout)
-
+  def save(user: Identity): User = {
+    Await.ready(User.insert(user).map(lastError => Logger.error(lastError.stringify)), Timeout)
     find(user.id).get
   }
 

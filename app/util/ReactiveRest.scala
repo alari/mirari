@@ -1,4 +1,4 @@
-package controllers
+package util
 
 import play.modules.reactivemongo.{MongoController, ReactiveMongoPlugin}
 import play.modules.reactivemongo.json.collection.JSONCollection
@@ -12,30 +12,8 @@ import reactivemongo.bson.BSONObjectID
 import reactivemongo.core.commands.LastError
 import scala.concurrent.Future
 
-trait ReactiveRest extends MongoController {
+trait ReactiveRest extends MongoController with MongoImplicits {
   self: Controller =>
-
-  // Object ID formatters
-  val objectIdFormat = OFormat[String](
-    (__ \ "$oid").read[String],
-    OWrites[String] {
-      s => Json.obj("$oid" -> s)
-    }
-  )
-
-  val toObjectId = OWrites[String] {
-    s => Json.obj("_id" -> Json.obj("$oid" -> s))
-  }
-
-  val getObjectId = (__ \ '_id \ '$oid).json.pick[JsString]
-
-  val fromObjectId = (__ \ '_id).json.copyFrom(getObjectId)
-
-  /** Generates a new ID and adds it to your JSON using Json extended notation for BSON */
-  val generateId = (__ \ '_id \ '$oid).json.put(JsString(BSONObjectID.generate.stringify))
-
-  /** Updates Json by adding both ID and date */
-  val addMongoId: Reads[JsObject] = __.json.update(generateId)
 
   /** Callback to be executed before delete, with id as parameter */
   def beforeDelete(id: String) {}

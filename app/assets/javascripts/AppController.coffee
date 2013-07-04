@@ -3,4 +3,6 @@ define ["main", "auth/AuthService"], (m)->
     $scope.isAuthenticated = authService.isAuthenticated
     authService.onUpdate (e, data)->
       $scope.isAuthenticated = data.isAuthenticated
+
+    authService.checkAuth()
   ]

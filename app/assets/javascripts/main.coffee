@@ -36,6 +36,9 @@ define ["angular-ui", "resolver", "auth/interceptor"], ->
         .when("/talk/new",
           routeResolver.resolve(["talk/NewTalkController"], "talk/new", "NewTalk"))
 
+        .when("/talk/:id",
+          routeResolver.resolve(["talk/ChatController"], "talk/talk", "Chat"))
+
       $locationProvider.html5Mode(true)
 
       authInterceptorProvider.unauthorized "/auth"
