@@ -1,8 +1,11 @@
 define ["main", "auth/AuthService"], (m)->
-  m.controller "AppController", ["$scope", "authService", ($scope, authService)->
-    $scope.isAuthenticated = authService.isAuthenticated
-    authService.onUpdate (e, data)->
-      $scope.isAuthenticated = data.isAuthenticated
+  m.controller "AppController", ["$scope", "authService", "$location", ($scope, authService, $location)->
+    $scope.auth = authService
 
-    authService.checkAuth()
+    authService.onUpdate ->
+      $scope.$apply() if not $scope.$$phase
+
+    authService.checkAuth (data)->
+      if !data.isAuthenticated and $location.path() isnt "/auth"
+        $location.path "/auth"
   ]

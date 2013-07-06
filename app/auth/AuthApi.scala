@@ -24,7 +24,7 @@ object AuthApi extends Controller with securesocial.core.SecureSocial {
         try {
           p.authenticate().fold( result => {
             result.asInstanceOf[PlainResult].header.status match {
-              case 400 => BadRequest(Json.obj("error" -> "Not authenticated"))
+              case 400 => Unauthorized(Json.obj("error" -> "Not authenticated"))
               case _ => result
             }
           } , {
@@ -32,12 +32,12 @@ object AuthApi extends Controller with securesocial.core.SecureSocial {
           })
         } catch {
           case ex: AccessDeniedException => {
-            Unauthorized(Messages("securesocial.login.accessDenied"))
+            Unauthorized(Json.obj("error" -> Messages("securesocial.login.accessDenied")))
           }
 
           case other: Throwable => {
             Logger.error("Unable to log user in. An exception was thrown", other)
-            Forbidden(Messages("securesocial.login.errorLoggingIn"))
+            Forbidden(Json.obj("error" -> Messages("securesocial.login.errorLoggingIn")))
           }
         }
       }

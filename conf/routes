@@ -9,6 +9,7 @@ GET      /                                   controllers.Application.index(jsRou
 GET      /assets/*file                       controllers.Assets.at(path="/public", file)
 
 
+GET      /api/talk/                          talk.TalkApi.list
 GET      /api/talk/socket                    talk.TalkApi.socket
 POST     /api/talk/new                       talk.TalkApi.newTalk
 GET      /api/talk/:id                       talk.TalkApi.messages(id)

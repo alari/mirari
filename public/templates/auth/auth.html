@@ -8,4 +8,8 @@
                             <span ui-if="isAuthenticated" class="navbar-form">
                                 {{username}} <button ng-click="signOut()">Sign Out</button>
                             </span>
+
+    <div ui-if="error" class="error">{{error}}</div>
+
+    <a href="/signup">sign up</a>
 </div>

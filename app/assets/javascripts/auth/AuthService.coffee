@@ -34,6 +34,9 @@ define ["main"], (m)->
         updateStatus data, onSuccessCallback
         if not @isAuthenticated
           $rootScope.$broadcast @STATUS_OUT, data
+      .error (data) =>
+        updateStatus data, onSuccessCallback
+        $rootScope.$broadcast @STATUS_OUT, data
 
     @onUpdate = (callback)=>
       $rootScope.$on @STATUS_UPDATED, callback

@@ -53,7 +53,7 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
     request.user match {
       case Some(user: User) =>
         Async {
-          TalkChain.list(user.id.id).map {list => Ok(Json.toJson(list))}
+          TalkChain.list(user).map {list => Ok(Json.toJson(list))}
         }
       case _ => Unauthorized
     }

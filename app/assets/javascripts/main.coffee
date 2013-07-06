@@ -14,12 +14,10 @@ require.config
 
 define ["angular-ui", "resolver", "auth/interceptor"], ->
 
-  app = angular.module "mirari", ["ui", "resolver", "auth.interceptor"],
+  app = angular.module "app", ["ui", "resolver", "auth.interceptor"],
   ['$routeProvider', '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
    'routeResolverProvider', 'authInterceptorProvider',
     ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, routeResolverProvider, authInterceptorProvider)->
-      routeResolverProvider.app = "mirari"
-
       routeResolverProvider.providers =
         $controllerProvider: $controllerProvider
         $compileProvider: $compileProvider
@@ -32,6 +30,9 @@ define ["angular-ui", "resolver", "auth/interceptor"], ->
       $routeProvider
         .when("/auth",
           routeResolver.resolve(["auth/AuthController"], "auth/auth", "Auth"))
+
+        .when("/talk",
+          routeResolver.resolve(["talk/TalksListController"], "talk/list", "TalksList"))
 
         .when("/talk/new",
           routeResolver.resolve(["talk/NewTalkController"], "talk/new", "NewTalk"))
@@ -46,6 +47,6 @@ define ["angular-ui", "resolver", "auth/interceptor"], ->
 
   require ["AppController"], ->
     angular.element(document).ready ->
-      angular.bootstrap(document, ['mirari'])
+      angular.bootstrap(document, ['app'])
 
   app

@@ -38,9 +38,7 @@ object TalkChain extends MongoImplicits{
 
   def getById(id: String) = collection.find(toObjectId.writes(id)).one[TalkChain]
 
-  def list(userId:String) = {
-    collection.find(Json.obj("participants" -> userId)).sort(Json.obj("last" -> -1)).cursor[TalkChain].toList()
-  }
+  def list(user:User) = collection.find(Json.obj("participants" -> user._id.get.stringify)).sort(Json.obj("last" -> -1)).cursor[TalkChain].toList()
 
   def create(user: User, talk: NewTalk): Future[Option[TalkChain]] = {
     val chain = TalkChain(Some(BSONObjectID.generate), Seq(user._id.get.stringify, talk.to), talk.topic, new Date())
