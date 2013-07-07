@@ -40,6 +40,11 @@ case class User(_id: Option[BSONObjectID],
 
                 passwordInfo: Option[PasswordInfo]) extends Identity {
   def id: UserId = UserId(userId, providerId)
+  def stringId: String =
+    if(_id.isEmpty) {
+      ""
+    } else _id.get.stringify
+
 }
 
 object User extends MongoImplicits with IdentityImplicits{

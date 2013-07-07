@@ -14,5 +14,5 @@ define ["main", "util/WebSocketService"], (m)->
         $scope.messages.push message
 
     $scope.send = ->
-      ws.send JSON.stringify({text:$scope.msg,username:$scope.username})
+      ws.send JSON.stringify({text:$scope.msg})
       $scope.msg = ""

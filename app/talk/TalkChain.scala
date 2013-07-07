@@ -38,15 +38,15 @@ object TalkChain extends MongoImplicits{
 
   def getById(id: String) = collection.find(toObjectId.writes(id)).one[TalkChain]
 
-  def list(user:User) = collection.find(Json.obj("participants" -> user._id.get.stringify)).sort(Json.obj("last" -> -1)).cursor[TalkChain].toList()
+  def list(user:User) = collection.find(Json.obj("participants" -> user.stringId)).sort(Json.obj("last" -> -1)).cursor[TalkChain].toList()
 
   def create(user: User, talk: NewTalk): Future[Option[TalkChain]] = {
-    val chain = TalkChain(Some(BSONObjectID.generate), Seq(user._id.get.stringify, talk.to), talk.topic, new Date())
+    val chain = TalkChain(Some(BSONObjectID.generate), Seq(user.stringId, talk.to), talk.topic, new Date())
 
     collection.insert(chain).map {lastError =>
       if(lastError.inError) None
       else {
-        Message.collection.insert(Message(None, user._id.get.stringify, chain._id.get.stringify, chain.participants, talk.text))
+        Message.collection.insert(Message(None, user.stringId, chain._id.get.stringify, chain.participants, talk.text))
         Some(chain)
       }
     }
@@ -57,7 +57,7 @@ object TalkChain extends MongoImplicits{
       case None => throw new NoSuchElementException(s"talk not found $talkId")
 
       case Some(talkChain)=>
-        if(talkChain.participants.contains(user._id.get.stringify)) {
+        if(talkChain.participants.contains(user.stringId)) {
           Message.collection.find(Json.obj("talkId" -> talkId)).cursor[Message].toList()
         } else {
           throw new NoSuchElementException("not in participants")

@@ -20,7 +20,7 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
 
           Async {
             TalkChain.create(user, t).map {
-              case Some(tc) =>Ok(Json.toJson(tc))
+              case Some(tc) => Ok(Json.toJson(tc))
               case _ => BadRequest("Failed!")
             }
 
@@ -29,7 +29,6 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
           case err @ JsError(_) => BadRequest(JsError.toFlatJson(err))
         }
       case Some(u) =>
-        println(u)
         Forbidden
       case _ => Unauthorized
     }
@@ -40,7 +39,7 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
       case Some(user: User) =>
         Async {
           TalkChain.messages(user, talkId).map {
-            case tc: Seq[Message] =>Ok(Json.toJson(tc))
+            case tc: Seq[Message] => Ok(Json.toJson(tc))
             case _ => BadRequest("Failed!")
           }
         }
@@ -61,10 +60,8 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
 
   def socket(talkId:String) = WebSocket.async[JsValue] { implicit request =>
     SecureSocial.currentUser match {
-      case Some(u: User) => ChatRoom.join(u.fullName)
-      case _ => ChatRoom.join("not authenticated")
+      case Some(u: User) => TalkSocket.join(Some(u), talkId)
+      case _ => TalkSocket.join(None, talkId)
     }
   }
-
 }
-

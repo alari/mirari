@@ -1,5 +1,3 @@
-package talk
-
 import akka.actor._
 import java.util.Date
 import scala.concurrent.duration._
@@ -112,7 +110,3 @@ case class Connected(enumerator:Enumerator[JsValue])
 case class CannotConnect(msg: String)
 
 case class Read(userId: String, messageId: String)
-
-
-case class DbMessage(id:String, userId: String, talkId: String, text: String, date:Date, unread:Seq[String])
-case class DbTalk(id:String, participants: Seq[String], title:String, unread: Seq[String], first:Date, last:Date)
