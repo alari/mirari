@@ -12,7 +12,7 @@ require.config
     "angular-ui-ieshiv":
       deps: ["angular-ui"]
 
-define ["angular-ui", "resolver", "auth/interceptor"], ->
+define ["angular-ui", "util/resolver", "auth/interceptor"], ->
 
   app = angular.module "app", ["ui", "resolver", "auth.interceptor"],
   ['$routeProvider', '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',

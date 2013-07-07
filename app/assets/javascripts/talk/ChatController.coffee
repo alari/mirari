@@ -1,5 +1,5 @@
-define ["main"], (m)->
-  m.controller "ChatController", ($scope, $http, $route)->
+define ["main", "util/WebSocketService"], (m)->
+  m.controller "ChatController", ($scope, $http, $route, webSocketService)->
     id = $route.current.params.id
 
     $scope.messages = []
@@ -7,10 +7,7 @@ define ["main"], (m)->
     $http.get("/api/talk/#{id}").success (data)=>
       $scope.messages = data
 
-    ws = new WebSocket("ws://localhost:9000/api/talk/socket")
-
-    ws.onopen = ->
-      console.log "websocket is opened"
+    ws = webSocketService.getLocal("/api/talk/#{id}/socket")
 
     ws.onmessage = (message)->
       $scope.$apply ->

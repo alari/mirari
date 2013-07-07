@@ -1,6 +1,6 @@
 <div>
     <h1>Беседы:</h1>
     <div ng-repeat="t in talks">
-        {{t}}
+        <a ng-href="/talk/{{t._id.$oid}}">{{t.topic}}</a>
     </div>
 </div>

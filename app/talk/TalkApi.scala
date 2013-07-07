@@ -59,7 +59,7 @@ object TalkApi extends Controller with securesocial.core.SecureSocial {
     }
   }
 
-  def socket = WebSocket.async[JsValue] { implicit request =>
+  def socket(talkId:String) = WebSocket.async[JsValue] { implicit request =>
     SecureSocial.currentUser match {
       case Some(u: User) => ChatRoom.join(u.fullName)
       case _ => ChatRoom.join("not authenticated")
